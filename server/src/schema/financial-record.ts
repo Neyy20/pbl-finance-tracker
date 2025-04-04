@@ -15,7 +15,9 @@ const financialRecordSchema = new mongoose.Schema<FinancialRecord>({
   description: { type: String, required: true },
   amount: { type: Number, required: true },
   category: { type: String, required: true },
-  paymentMethod: { type: String, required: true },
+  paymentMethod: { type: String, default: "Cash" },
+}, {
+  timestamps: true // Add timestamps for created and updated
 });
 
 const FinancialRecordModel = mongoose.model<FinancialRecord>(
