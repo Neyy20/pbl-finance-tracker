@@ -2,6 +2,7 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import { Dashboard } from "./pages/dashboard";
 import { Auth } from "./pages/auth/indexAuth"; // Keep this import path
+import Login from "./pages/auth/login"; // Add this import for the Login component
 import { FinancialRecordsProvider } from "./contexts/financial-record-context";
 import { AuthProvider, useAuth } from "./contexts/auth-context";
 import { 
@@ -31,7 +32,11 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
+import AssessmentIcon from "@mui/icons-material/Assessment"; // Add this import for the Reports icon
 import { useState } from "react";
+
+// Import the Reports component
+import Reports from './pages/reports';
 
 // Create a theme
 const theme = createTheme({
@@ -191,15 +196,26 @@ const Navigation = () => {
           </Typography>
           
           {isAuthenticated && !isMobile && (
-            <Button 
-              color="inherit" 
-              component={Link} 
-              to="/"
-              startIcon={<DashboardIcon />}
-              sx={{ mr: 2 }}
-            >
-              Dashboard
-            </Button>
+            <>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/"
+                startIcon={<DashboardIcon />}
+                sx={{ mr: 2 }}
+              >
+                Dashboard
+              </Button>
+              <Button 
+                color="inherit" 
+                component={Link} 
+                to="/reports"
+                startIcon={<AssessmentIcon />}
+                sx={{ mr: 2 }}
+              >
+                Reports
+              </Button>
+            </>
           )}
           
           {isAuthenticated ? (
@@ -289,6 +305,12 @@ const Navigation = () => {
               </ListItemIcon>
               <ListItemText primary="Dashboard" />
             </ListItem>
+            <ListItem button component={Link} to="/reports">
+              <ListItemIcon>
+                <AssessmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Reports" />
+            </ListItem>
           </List>
           <Divider />
           <List>
@@ -324,6 +346,28 @@ function AppContent() {
               }
             />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Login />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <FinancialRecordsProvider>
+                    <Dashboard />
+                  </FinancialRecordsProvider>
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/reports" 
+              element={
+                <ProtectedRoute>
+                  <FinancialRecordsProvider>
+                    <Reports />
+                  </FinancialRecordsProvider>
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Box>
         
