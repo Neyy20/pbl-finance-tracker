@@ -43,7 +43,7 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
     if (!user) return;
     
     try {
-      const response = await fetch(`http://localhost:3001/financial-records/getAllByUserID/${user._id}`);
+      const response = await fetch(`https://finance-tracker-backend-3mez.onrender.com/financial-records/getAllByUserID/${user._id}`);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -64,7 +64,7 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
     const recordWithUserId = { ...record, userId: user._id };
     
     try {
-      const response = await fetch(`http://localhost:3001/financial-records`, {
+      const response = await fetch(`https://finance-tracker-backend-3mez.onrender.com/financial-records`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -86,7 +86,7 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
   const updateRecord = async (id: string, newRecord: Partial<FinancialRecord>) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/financial-records/${id}`,
+        `https://finance-tracker-backend-3mez.onrender.com/financial-records/${id}`,
         {
           method: "PUT",
           headers: {
@@ -114,7 +114,7 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
   const deleteRecord = async (id: string) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/financial-records/${id}`,
+        `https://finance-tracker-backend-3mez.onrender.com/financial-records/${id}`,
         {
           method: "DELETE",
         }
