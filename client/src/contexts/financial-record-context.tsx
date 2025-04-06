@@ -39,11 +39,26 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
     }
   }, [user]);
 
+  // Update the API_URL to use environment variables
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  console.log('Using API URL:', API_URL); // Add this for debugging
+  
+  // Update any fetch calls to use the API_URL
   const fetchRecords = async () => {
-    if (!user) return;
-    
     try {
-      const response = await fetch(`http://localhost:3001/financial-records/getAllByUserID/${user._id}`);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Authentication required');
+        return;
+      }
+      
+      const response = await fetch(`${API_URL}/api/records`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -64,10 +79,18 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
     const recordWithUserId = { ...record, userId: user._id };
     
     try {
-      const response = await fetch(`http://localhost:3001/financial-records`, {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Authentication required');
+        return;
+      }
+      
+      const response = await fetch(`${API_URL}/api/records`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(recordWithUserId),
       });
@@ -85,12 +108,20 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
 
   const updateRecord = async (id: string, newRecord: Partial<FinancialRecord>) => {
     try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Authentication required');
+        return;
+      }
+      
       const response = await fetch(
-        `http://localhost:3001/financial-records/${id}`,
+        `${API_URL}/api/records/${id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(newRecord),
         }
@@ -113,10 +144,20 @@ export const FinancialRecordsProvider: React.FC<{ children: ReactNode }> = ({ ch
 
   const deleteRecord = async (id: string) => {
     try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        console.error('Authentication required');
+        return;
+      }
+      
       const response = await fetch(
-        `http://localhost:3001/financial-records/${id}`,
+        `${API_URL}/api/records/${id}`,
         {
           method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
         }
       );
       

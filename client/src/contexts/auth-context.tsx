@@ -37,13 +37,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, []);
   
+  // Use environment variable for API URL
+  const API_URL = "https://finance-tracker-backend-3mez.onrender.com";
+  console.log('Auth context using API URL:', API_URL);
+  
   const login = async (username: string, password: string) => {
     try {
-      setError(null);
-      const response = await fetch("http://localhost:3001/auth/login", {
-        method: "POST",
+      console.log(`Attempting to login at ${API_URL}/auth/login`);
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
       });
@@ -62,11 +66,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
   
-  // Make sure the fetch calls include the proper headers
   const register = async (username: string, email: string, password: string) => {
     try {
       setError(null);
-      const response = await fetch("http://localhost:3001/auth/register", {
+      console.log(`Attempting to register at ${API_URL}/auth/register`);
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
